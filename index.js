@@ -1,9 +1,22 @@
 import express from 'express';
 import usuarioRoutes from  './routes/usuarioRoute.js'
+import db from './config/db.js';
 
 //Crear la app
 const app = express()
 
+//Hablilitar lectura
+app.use(express.urlencoded({extenden:true}) )
+
+// Conexion a la base de datos
+try {
+    await db.authenticate();
+    db.sync()
+    console.log('Conexión correcta a la base de datos');
+  } catch (error) {
+    console.error('Error al conectar a la base de datos:', error);
+  }
+  
 //Habilitar Pug
 app.set('view engine', 'pug')
 app.set('views','./views')
