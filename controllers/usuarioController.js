@@ -1,6 +1,7 @@
 
 import Usuario from '../models/Usuario.js'
 import { check, validationResult } from 'express-validator'
+import { generarId } from '../helpers/tokens.js'
 
 
 const formularioLogin = (req, resp) => {
@@ -43,7 +44,8 @@ const registrar = async (req, resp) => {
             }
         })
     }
-
+       
+   
     //Extraer los datos
     const {nombre,email,password} = req.body
 
@@ -59,17 +61,26 @@ const registrar = async (req, resp) => {
             }
         })
     }
+/* 
+    console.log(existeUsuario);
+    return */
+
 
     //Almacenar un usuario 
     await Usuario.create({
         nombre,
-        email,
+        email  ,
         password,
-        token:123
+        token:generarId()
     })
-   
-    console.log(existeUsuario);
-    return
+
+
+    //Mostrar mensaje de confirmacion
+    resp.render('templates/mensaje', {
+        pagina: 'Cuenta creada correctamente',
+        mensaje: ' Hemos enviado un E-mail de confirmacion, presiona en el enlace.'
+    })
+
 }
 
 export {
